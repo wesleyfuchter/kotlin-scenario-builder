@@ -30,7 +30,7 @@ data class Transaction(
         val date: LocalDateTime,
 
         @ManyToOne
-        @JoinColumn(nullable = false)
+        @JoinColumn(nullable = false, name = "category_id")
         val category: Category
 
 )
