@@ -63,7 +63,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-			<version>5.4.3.Final</version>
+			<version>RELEASE</version>
 		</dependency>
 	</dependencies>
 
@@ -96,6 +96,24 @@
 					<dependency>
 						<groupId>org.jetbrains.kotlin</groupId>
 						<artifactId>kotlin-maven-allopen</artifactId>
+						<version>${kotlin.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.jetbrains.kotlin</groupId>
+				<artifactId>kotlin-maven-plugin</artifactId>
+				<version>${kotlin.version}</version>
+				<configuration>
+					<compilerPlugins>
+						<plugin>jpa</plugin>
+					</compilerPlugins>
+					<jvmTarget>1.11</jvmTarget>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<artifactId>kotlin-maven-noarg</artifactId>
+						<groupId>org.jetbrains.kotlin</groupId>
 						<version>${kotlin.version}</version>
 					</dependency>
 				</dependencies>
