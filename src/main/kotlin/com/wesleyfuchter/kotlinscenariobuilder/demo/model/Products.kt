@@ -1,7 +1,7 @@
-package com.wesleyfuchter.kotlinscenariobuilder.demo
+package com.wesleyfuchter.kotlinscenariobuilder.demo.model
 
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface CategoryRepository: CrudRepository<Category, String>
+interface Products: CrudRepository<Product, Long>
