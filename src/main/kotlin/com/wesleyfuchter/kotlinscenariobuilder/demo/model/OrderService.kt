@@ -2,9 +2,8 @@ package com.wesleyfuchter.kotlinscenariobuilder.demo.model
 
 import com.wesleyfuchter.kotlinscenariobuilder.demo.search.SearchRequest
 
-interface Orders {
+interface OrderService {
 
-    fun findOrdersWithCustomQuery(request: SearchRequest): List<OrderSearchResponse>
-
+    fun searchByRequest(request: SearchRequest): List<Order>
 
 }
