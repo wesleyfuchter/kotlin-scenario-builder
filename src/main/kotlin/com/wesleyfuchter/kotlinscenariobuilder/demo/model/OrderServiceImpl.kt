@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service
 @Service
 class OrderServiceImpl @Autowired constructor(private val orders: Orders): OrderService {
 
-    override fun searchByRequest(request: SearchRequest): List<Order> {
+    override fun searchByRequest(request: SearchRequest): List<OrderSearchResponse> {
         return orders.findOrdersWithCustomQuery(request)
     }
 

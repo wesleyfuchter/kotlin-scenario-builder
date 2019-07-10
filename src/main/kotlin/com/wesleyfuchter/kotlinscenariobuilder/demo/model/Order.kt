@@ -1,5 +1,6 @@
 package com.wesleyfuchter.kotlinscenariobuilder.demo.model
 
+import java.time.LocalDate
 import javax.persistence.*
 
 @Entity
@@ -16,6 +17,9 @@ data class Order(
 
         @Column(nullable = false)
         val finished: Boolean = false,
+
+        @Column(nullable = false)
+        val orderDate: LocalDate,
 
         @OneToMany
         @JoinColumn

@@ -1,5 +1,7 @@
 package com.wesleyfuchter.kotlinscenariobuilder.demo.dbtest
 
+import java.time.LocalDate
+
 data class City (
         val name: String
 )
@@ -26,16 +28,11 @@ data class OrderProduct (
 data class Order (
     val customer: String,
     val finished: Boolean? = false,
-    val products: List<OrderProduct>
+    val orderDate: LocalDate,
+    val products: ArrayList<OrderProduct> = ArrayList()
 ) {
-    class Builder {
 
-        private val _products = ArrayList<OrderProduct>()
+    fun orderProduct(productName: String, amount: Int)
+            = products.add(OrderProduct(productName = productName, amount = amount))
 
-        fun orderProduct(productName: String, amount: Int)
-                = _products.add(OrderProduct(productName = productName, amount = amount))
-
-        fun build(customer: String, finished: Boolean?) = Order(customer, finished, _products)
-
-    }
 }

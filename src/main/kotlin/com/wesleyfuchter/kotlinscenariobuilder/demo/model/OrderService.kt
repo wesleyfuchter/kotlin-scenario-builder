@@ -4,6 +4,6 @@ import com.wesleyfuchter.kotlinscenariobuilder.demo.search.SearchRequest
 
 interface OrderService {
 
-    fun searchByRequest(request: SearchRequest): List<Order>
+    fun searchByRequest(request: SearchRequest): List<OrderSearchResponse>
 
 }

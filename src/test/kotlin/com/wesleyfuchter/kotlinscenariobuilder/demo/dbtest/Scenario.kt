@@ -1,5 +1,7 @@
 package com.wesleyfuchter.kotlinscenariobuilder.demo.dbtest
 
+import java.time.LocalDate
+
 data class Scenario (
 
         val cities: List<City>,
@@ -30,10 +32,11 @@ data class Scenario (
                 = _products.add(Product(name = name, category = category))
 
         fun order(customer: String,
-                  products: List<OrderProduct> = ArrayList(),
                   finished: Boolean = false,
-                  buildScenario: Order.Builder.() -> Unit = {})
-                = _orders.add(Order(customer = customer, finished = finished, products = products))
+                  orderDate: LocalDate = LocalDate.now(),
+                  buildScenario: Order.() -> Unit = {})
+                = _orders.add(
+                Order(customer = customer, finished = finished, orderDate = orderDate).apply(buildScenario))
 
         fun build() = Scenario(cities = _cities,
                         customers = _customers,
