@@ -1,5 +1,8 @@
 package com.wesleyfuchter.kotlinscenariobuilder.demo.dbtest
 
+import org.springframework.stereotype.Component
+
+@Component
 class ScenarioLoader {
 
     operator fun invoke(scenario: Scenario, schema: DatabaseSchema, runTest: DatabaseScenarioRunner.() -> Unit) {

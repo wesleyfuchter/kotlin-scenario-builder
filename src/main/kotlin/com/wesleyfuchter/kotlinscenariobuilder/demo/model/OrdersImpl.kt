@@ -12,7 +12,7 @@ class OrdersImpl
     @Autowired constructor(private val namedParameterJdbcTemplate: NamedParameterJdbcTemplate): Orders {
 
     override fun findOrdersWithCustomQuery(request: SearchRequest): List<OrderSearchResponse> {
-        val (customersIds, citiesIds, productsIds, productCategoryIds, finished) = request
+        val (cityToDelivery, finished) = request
 
         val sql = """
 
@@ -24,10 +24,7 @@ class OrdersImpl
         """.trimIndent()
 
          return namedParameterJdbcTemplate.query(sql, mapOf(
-                "customersIds" to customersIds.joinToString(", "),
-                "citiesIds" to citiesIds.joinToString(", "),
-                "productsIds" to productsIds.joinToString(", "),
-                "productCategoryIds" to productCategoryIds.joinToString(", "),
+                "cityToDelivery" to cityToDelivery,
                 "finished" to finished
         )) { resultSet, _ ->
              OrderSearchResponse.with {
