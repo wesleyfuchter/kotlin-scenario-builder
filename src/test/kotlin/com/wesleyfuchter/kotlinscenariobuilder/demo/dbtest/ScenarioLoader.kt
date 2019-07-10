@@ -2,9 +2,17 @@ package com.wesleyfuchter.kotlinscenariobuilder.demo.dbtest
 
 class ScenarioLoader {
 
-    operator fun invoke(scenario: Scenario, runTest: DatabaseScenarioRunner.() -> Unit)
-            = DatabaseScenarioRunner(scenario).runTest()
+    operator fun invoke(scenario: Scenario, schema: DatabaseSchema, runTest: DatabaseScenarioRunner.() -> Unit) {
+        load(scenario, schema)
+        DatabaseScenarioRunner(scenario, schema).runTest()
+    }
 
-    class DatabaseScenarioRunner(val scenario: Scenario)
+    fun load(scenario: Scenario, schema: DatabaseSchema) {
+//        schema.cities.saveAll(scenario.cities.map { city -> city.parse() })
+    }
+
+    class DatabaseScenarioRunner(val scenario: Scenario, private val schema: DatabaseSchema): DatabaseSchema by schema
+
+
 
 }

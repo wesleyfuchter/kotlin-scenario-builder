@@ -1,15 +1,20 @@
 package com.wesleyfuchter.kotlinscenariobuilder.demo
 
+import com.wesleyfuchter.kotlinscenariobuilder.demo.dbtest.DatabaseSchema
 import com.wesleyfuchter.kotlinscenariobuilder.demo.dbtest.Scenario
 import com.wesleyfuchter.kotlinscenariobuilder.demo.dbtest.ScenarioLoader
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.test.context.junit4.SpringRunner
 import java.time.LocalDate
 import java.time.Month
 
+@RunWith(SpringRunner::class)
 class OrderSearchControllerTest {
 
-    //@Autowired <- enable with spring context implemented
-    private val loader: ScenarioLoader = ScenarioLoader()
+    @Autowired private lateinit var loader: ScenarioLoader
+    @Autowired private lateinit var schema: DatabaseSchema
 
     private val scenario = Scenario.with {
 
@@ -58,10 +63,8 @@ class OrderSearchControllerTest {
     }
 
     @Test fun `test should return all customers with active orders for a given delivery city`() {
-        loader(scenario) {
-
+        loader(scenario, schema) {
             println("test body start")
-
         }
     }
 
