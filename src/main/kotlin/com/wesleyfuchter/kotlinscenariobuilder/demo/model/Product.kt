@@ -7,8 +7,8 @@ import javax.persistence.*
 data class Product(
 
         @Id
-        @GeneratedValue
-        val id: Long,
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_id_seq")
+        val id: Long? = null,
 
         @Column(nullable = false)
         val name: String,

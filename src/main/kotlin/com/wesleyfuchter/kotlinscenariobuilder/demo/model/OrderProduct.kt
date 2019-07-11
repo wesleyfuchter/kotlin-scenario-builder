@@ -7,15 +7,11 @@ import javax.persistence.*
 data class OrderProduct(
 
         @Id
-        @GeneratedValue
-        val id: Long,
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_product_id_seq")
+        val id: Long? = null,
 
-        @JoinColumn
         @ManyToOne
-        val order: Order,
-
-        @JoinColumn
-        @ManyToOne
+        @JoinColumn(name = "product_id")
         val product: Product,
 
         @Column(nullable = false)

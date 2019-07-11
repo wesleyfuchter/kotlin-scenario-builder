@@ -1,6 +1,5 @@
 package com.wesleyfuchter.kotlinscenariobuilder.demo
 
-import com.wesleyfuchter.kotlinscenariobuilder.demo.dbtest.Customer
 import com.wesleyfuchter.kotlinscenariobuilder.demo.dbtest.DatabaseSchema
 import com.wesleyfuchter.kotlinscenariobuilder.demo.dbtest.Scenario
 import com.wesleyfuchter.kotlinscenariobuilder.demo.dbtest.ScenarioLoader
@@ -14,14 +13,12 @@ import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
 import java.time.LocalDate
 import java.time.Month
 
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes = [DatabaseConfiguration::class])
 @EnableAutoConfiguration
 class OrderSearchServiceTest {
 
@@ -36,7 +33,7 @@ class OrderSearchServiceTest {
         city(name = "Chicago")
         city(name = "Boston")
 
-        customer(name = "Jack Shepard", city = "Los Angeles")
+        customer(name = "Jack Shepherd", city = "Los Angeles")
         customer(name = "James Ford", city = "New York")
         customer(name = "Hugo Reyes", city = "Boston")
         customer(name = "John Lock", city = "Chicago")
@@ -65,7 +62,7 @@ class OrderSearchServiceTest {
             orderProduct(productName = "Chevrolet Camaro", amount = 2)
         }
 
-        order(customer = "Jack Shepard")
+        order(customer = "Jack Shepherd")
         order(customer = "James Ford")
         order(customer = "James Ford")
         order(customer = "James Ford")

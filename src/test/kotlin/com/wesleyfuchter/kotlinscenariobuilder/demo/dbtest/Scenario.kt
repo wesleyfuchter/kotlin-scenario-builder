@@ -4,39 +4,39 @@ import java.time.LocalDate
 
 data class Scenario (
 
-        val cities: List<City>,
-        val categories: List<ProductCategory>,
-        val customers: List<Customer>,
-        val products: List<Product>,
-        val orders: List<Order>
+        val cities: List<CityTEntity>,
+        val categories: List<ProductCategoryTEntity>,
+        val customers: List<CustomerTEntity>,
+        val products: List<ProductTEntity>,
+        val orders: List<OrderTEntity>
 
 ) {
     class Builder {
 
-        private val _cities = ArrayList<City>()
-        private val _categories = ArrayList<ProductCategory>()
-        private val _customers = ArrayList<Customer>()
-        private val _products = ArrayList<Product>()
-        private val _orders = ArrayList<Order>()
+        private val _cities = ArrayList<CityTEntity>()
+        private val _categories = ArrayList<ProductCategoryTEntity>()
+        private val _customers = ArrayList<CustomerTEntity>()
+        private val _products = ArrayList<ProductTEntity>()
+        private val _orders = ArrayList<OrderTEntity>()
 
         fun city(name: String)
-                = _cities.add(City(name = name))
+                = _cities.add(CityTEntity(name = name))
 
         fun customer(name: String, city: String)
-                = _customers.add(Customer(name = name, city = city))
+                = _customers.add(CustomerTEntity(name = name, city = city))
 
         fun productCategory(name: String)
-                = _categories.add(ProductCategory(name = name))
+                = _categories.add(ProductCategoryTEntity(name = name))
 
         fun product(name: String, category: String)
-                = _products.add(Product(name = name, category = category))
+                = _products.add(ProductTEntity(name = name, category = category))
 
         fun order(customer: String,
                   finished: Boolean = false,
                   orderDate: LocalDate = LocalDate.now(),
-                  buildScenario: Order.() -> Unit = {})
+                  buildScenario: OrderTEntity.() -> Unit = {})
                 = _orders.add(
-                Order(customer = customer, finished = finished, orderDate = orderDate).apply(buildScenario))
+                OrderTEntity(customer = customer, finished = finished, orderDate = orderDate).apply(buildScenario))
 
         fun build() = Scenario(cities = _cities,
                         customers = _customers,

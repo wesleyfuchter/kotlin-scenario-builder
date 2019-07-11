@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class OrderServiceImpl @Autowired constructor(private val orders: Orders): OrderService {
+class OrderServiceImpl @Autowired constructor(private val orders: OrdersCustomRepository): OrderService {
 
     override fun searchByRequest(request: SearchRequest): List<OrderSearchResponse> {
         return orders.findOrdersWithCustomQuery(request)

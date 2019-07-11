@@ -1,3 +1,10 @@
+create sequence city_id_seq start with 1 increment by 1;
+create sequence product_category_id_seq start with 1 increment by 1;
+create sequence product_id_seq start with 1 increment by 1;
+create sequence order_product_id_seq start with 1 increment by 1;
+create sequence order_id_seq start with 1 increment by 1;
+create sequence customer_id_seq start with 1 increment by 1;
+
 create table city (
   id bigint not null,
   name varchar not null
@@ -44,8 +51,8 @@ create index product_category_idx on product (category_id asc);
 
 create table "order" (
     id bigint not null,
-    name varchar not null,
     customer_id bigint not null,
+    order_date timestamp not null,
     finished boolean not null default false
 );
 
@@ -59,7 +66,7 @@ create index order_customer_idx on "order" (customer_id asc);
 
 create table order_product (
     id bigint not null,
-    order_id bigint not null,
+    order_id bigint,
     product_id bigint not null,
     amount bigint not null
 );

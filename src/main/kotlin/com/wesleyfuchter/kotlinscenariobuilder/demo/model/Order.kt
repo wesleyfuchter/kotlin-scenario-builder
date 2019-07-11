@@ -4,12 +4,12 @@ import java.time.LocalDate
 import javax.persistence.*
 
 @Entity
-@Table(name = "order")
+@Table(name = "\"order\"")
 data class Order(
 
         @Id
-        @GeneratedValue
-        val id: Long,
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_id_seq")
+        val id: Long? = null,
 
         @JoinColumn
         @ManyToOne
@@ -21,8 +21,8 @@ data class Order(
         @Column(nullable = false)
         val orderDate: LocalDate,
 
-        @OneToMany
-        @JoinColumn
+        @OneToMany(cascade = [CascadeType.PERSIST])
+        @JoinColumn(name = "order_id")
         val products: List<OrderProduct>
 
 )

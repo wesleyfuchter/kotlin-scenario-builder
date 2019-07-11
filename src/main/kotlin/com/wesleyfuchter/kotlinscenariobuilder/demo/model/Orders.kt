@@ -1,10 +1,7 @@
 package com.wesleyfuchter.kotlinscenariobuilder.demo.model
 
-import com.wesleyfuchter.kotlinscenariobuilder.demo.search.SearchRequest
+import org.springframework.data.repository.CrudRepository
+import org.springframework.stereotype.Repository
 
-interface Orders {
-
-    fun findOrdersWithCustomQuery(request: SearchRequest): List<OrderSearchResponse>
-
-
-}
+@Repository
+interface Orders: CrudRepository<Order, Long>
