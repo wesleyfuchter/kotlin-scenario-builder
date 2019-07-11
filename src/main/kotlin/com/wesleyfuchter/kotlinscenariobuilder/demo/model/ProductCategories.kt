@@ -4,4 +4,8 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface ProductCategories: CrudRepository<ProductCategory, Long>
+interface ProductCategories: CrudRepository<ProductCategory, Long> {
+
+    fun findFirstByName(name: String): ProductCategory?
+
+}

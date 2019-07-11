@@ -6,21 +6,20 @@ import org.springframework.stereotype.Component
 @Component
 class ScenarioLoader {
 
-    operator fun invoke(scenario: Scenario, schema: DatabaseSchema, runTest: DatabaseScenarioRunner.() -> Unit) {
+    operator fun invoke(scenario: DatabaseScenario, schema: DatabaseSchema, runTest: DatabaseScenarioRunner.() -> Unit) {
         load(scenario, schema)
         DatabaseScenarioRunner(scenario, schema).runTest()
     }
 
-    fun load(scenario: Scenario, schema: DatabaseSchema) {
+    fun load(scenario: DatabaseScenario, schema: DatabaseSchema) {
         orders(schema, scenario,
                 customers(schema, scenario,
                         cities(schema, scenario)),
                 products(schema, scenario,
                         categories(schema, scenario)))
-
     }
 
-    private fun orders(schema: DatabaseSchema, scenario: Scenario, customers: MutableIterable<Customer>, products: MutableIterable<Product>)
+    private fun orders(schema: DatabaseSchema, scenario: DatabaseScenario, customers: MutableIterable<Customer>, products: MutableIterable<Product>)
             = schema.orders.saveAll(scenario.orders.map { order ->
         Order(
                 customer = customers.find { customer -> customer.name == order.customer }!!,
@@ -34,7 +33,7 @@ class ScenarioLoader {
                 })
     })
 
-    private fun products(schema: DatabaseSchema, scenario: Scenario, categories: MutableIterable<ProductCategory>): MutableIterable<Product>
+    private fun products(schema: DatabaseSchema, scenario: DatabaseScenario, categories: MutableIterable<ProductCategory>): MutableIterable<Product>
             = schema.products.saveAll(scenario.products.map { product ->
         Product(
                 name = product.name,
@@ -42,10 +41,10 @@ class ScenarioLoader {
         )
     })
 
-    private fun categories(schema: DatabaseSchema, scenario: Scenario): MutableIterable<ProductCategory>
+    private fun categories(schema: DatabaseSchema, scenario: DatabaseScenario): MutableIterable<ProductCategory>
             = schema.productCategories.saveAll(scenario.categories.map { category -> ProductCategory(name = category.name) })
 
-    private fun customers(schema: DatabaseSchema, scenario: Scenario, cities: MutableIterable<City>): MutableIterable<Customer>
+    private fun customers(schema: DatabaseSchema, scenario: DatabaseScenario, cities: MutableIterable<City>): MutableIterable<Customer>
             = schema.customers.saveAll(scenario.customers.map { customer ->
         Customer(
                 name = customer.name,
@@ -53,10 +52,10 @@ class ScenarioLoader {
         )
     })
 
-    private fun cities(schema: DatabaseSchema, scenario: Scenario): MutableIterable<City>
+    private fun cities(schema: DatabaseSchema, scenario: DatabaseScenario): MutableIterable<City>
             = schema.cities.saveAll(scenario.cities.map { city -> City(name = city.name) })
 
-    class DatabaseScenarioRunner(val scenario: Scenario,
+    class DatabaseScenarioRunner(val scenario: DatabaseScenario,
                                  private val schema: DatabaseSchema) : DatabaseSchema by schema
 
 

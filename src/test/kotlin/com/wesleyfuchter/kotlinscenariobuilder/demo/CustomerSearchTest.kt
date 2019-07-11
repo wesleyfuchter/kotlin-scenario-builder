@@ -1,11 +1,11 @@
 package com.wesleyfuchter.kotlinscenariobuilder.demo
 
 import com.wesleyfuchter.kotlinscenariobuilder.demo.dbtest.DatabaseSchema
-import com.wesleyfuchter.kotlinscenariobuilder.demo.dbtest.Scenario
+import com.wesleyfuchter.kotlinscenariobuilder.demo.dbtest.DatabaseScenario
 import com.wesleyfuchter.kotlinscenariobuilder.demo.dbtest.ScenarioLoader
 import com.wesleyfuchter.kotlinscenariobuilder.demo.model.OrderSearchResponse
 import com.wesleyfuchter.kotlinscenariobuilder.demo.model.OrderService
-import com.wesleyfuchter.kotlinscenariobuilder.demo.search.SearchRequest
+import com.wesleyfuchter.kotlinscenariobuilder.demo.search.CustomerSearchRequest
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.iterable.Extractor
 import org.junit.Test
@@ -20,13 +20,13 @@ import java.time.Month
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @EnableAutoConfiguration
-class OrderSearchServiceTest {
+class CustomerSearchTest {
 
     @Autowired private lateinit var loader: ScenarioLoader
     @Autowired private lateinit var schema: DatabaseSchema
     @Autowired private lateinit var orderService: OrderService
 
-    private val scenario = Scenario.with {
+    private val scenario = DatabaseScenario.with {
 
         city(name = "New York")
         city(name = "Los Angeles")
@@ -77,8 +77,8 @@ class OrderSearchServiceTest {
     @Test fun `test should return all customers with active orders for a given delivery city`() {
         loader(scenario, schema) {
             assertThat(orderService.searchByRequest(
-                    SearchRequest(
-                            cityToDelivery = "Los Angeles",
+                    CustomerSearchRequest(
+                            cityToDelivery = schema.cities.findFirstByName("Los Angeles"),
                             finished = false
                     )
             )).`as`("Jack Shepherd, Hugo Reyes and James Ford has active orders to deliver in Los Angeles")
@@ -90,8 +90,8 @@ class OrderSearchServiceTest {
     @Test fun `test should return all customers with inactive orders for a given delivery city`() {
         loader(scenario, schema) {
             assertThat(orderService.searchByRequest(
-                    SearchRequest(
-                            cityToDelivery = "Boston",
+                    CustomerSearchRequest(
+                            cityToDelivery = schema.cities.findFirstByName("Boston"),
                             finished = true
                     )
             )).`as`("John Lock and Kate Austin has inactive orders to deliver in Boston")
@@ -103,8 +103,8 @@ class OrderSearchServiceTest {
     @Test fun `test should return all customers with active orders for a given product category`() {
         loader(scenario, schema) {
             assertThat(orderService.searchByRequest(
-                    SearchRequest(
-                            productCategory = "Sports",
+                    CustomerSearchRequest(
+                            productCategory = schema.productCategories.findFirstByName("Sports"),
                             finished = false
                     )
             )).`as`("Just James Ford has active orders to Sports products")
@@ -116,8 +116,8 @@ class OrderSearchServiceTest {
     @Test fun `test should return all customers with inactive orders for a given product category`() {
         loader(scenario, schema) {
             assertThat(orderService.searchByRequest(
-                    SearchRequest(
-                            productCategory = "Sports",
+                    CustomerSearchRequest(
+                            productCategory = schema.productCategories.findFirstByName("Car"),
                             finished = true
                     )
             )).`as`("Kate Austin, John Lock, and Jack Shepherd has active orders to Sports products")
@@ -129,7 +129,7 @@ class OrderSearchServiceTest {
     @Test fun `test should return all customers with inactive orders for a given range of days`() {
         loader(scenario, schema) {
             assertThat(orderService.searchByRequest(
-                    SearchRequest(
+                    CustomerSearchRequest(
                             startDate = LocalDate.of(2019, Month.JANUARY, 1),
                             endDate = LocalDate.of(2019, Month.APRIL, 30),
                             finished = true

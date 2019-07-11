@@ -1,14 +1,14 @@
 package com.wesleyfuchter.kotlinscenariobuilder.demo.model
 
-import com.wesleyfuchter.kotlinscenariobuilder.demo.search.SearchRequest
+import com.wesleyfuchter.kotlinscenariobuilder.demo.search.CustomerSearchRequest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class OrderServiceImpl @Autowired constructor(private val orders: OrdersCustomRepository): OrderService {
+class OrderServiceImpl @Autowired constructor(private val orders: CustomersCustomRepository): OrderService {
 
-    override fun searchByRequest(request: SearchRequest): List<OrderSearchResponse> {
-        return orders.findOrdersWithCustomQuery(request)
+    override fun searchByRequest(request: CustomerSearchRequest): List<OrderSearchResponse> {
+        return orders.findCustomersWithOrdersByCustomQuery(request)
     }
 
 }

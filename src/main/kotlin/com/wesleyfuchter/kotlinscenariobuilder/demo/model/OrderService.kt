@@ -1,9 +1,9 @@
 package com.wesleyfuchter.kotlinscenariobuilder.demo.model
 
-import com.wesleyfuchter.kotlinscenariobuilder.demo.search.SearchRequest
+import com.wesleyfuchter.kotlinscenariobuilder.demo.search.CustomerSearchRequest
 
 interface OrderService {
 
-    fun searchByRequest(request: SearchRequest): List<OrderSearchResponse>
+    fun searchByRequest(request: CustomerSearchRequest): List<OrderSearchResponse>
 
 }

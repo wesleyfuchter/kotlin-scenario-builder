@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 class OrderSearchController @Autowired constructor(private val orderService: OrderService) {
 
     @PutMapping
-    fun search(@RequestBody request: SearchRequest): ResponseEntity<Iterable<OrderSearchResponse>>
+    fun search(@RequestBody request: CustomerSearchRequest): ResponseEntity<Iterable<OrderSearchResponse>>
             = ResponseEntity.ok(orderService.searchByRequest(request))
 
 }

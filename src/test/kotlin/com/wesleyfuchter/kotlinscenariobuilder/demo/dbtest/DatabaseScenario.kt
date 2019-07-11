@@ -2,7 +2,7 @@ package com.wesleyfuchter.kotlinscenariobuilder.demo.dbtest
 
 import java.time.LocalDate
 
-data class Scenario (
+data class DatabaseScenario (
 
         val cities: List<CityTEntity>,
         val categories: List<ProductCategoryTEntity>,
@@ -38,7 +38,7 @@ data class Scenario (
                 = _orders.add(
                 OrderTEntity(customer = customer, finished = finished, orderDate = orderDate).apply(buildScenario))
 
-        fun build() = Scenario(cities = _cities,
+        fun build() = DatabaseScenario(cities = _cities,
                         customers = _customers,
                         categories = _categories,
                         products = _products,
