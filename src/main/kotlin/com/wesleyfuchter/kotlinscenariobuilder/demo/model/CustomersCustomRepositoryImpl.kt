@@ -1,6 +1,7 @@
 package com.wesleyfuchter.kotlinscenariobuilder.demo.model
 
 import com.wesleyfuchter.kotlinscenariobuilder.demo.search.CustomerSearchRequest
+import com.wesleyfuchter.kotlinscenariobuilder.demo.search.OrderSearchResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository

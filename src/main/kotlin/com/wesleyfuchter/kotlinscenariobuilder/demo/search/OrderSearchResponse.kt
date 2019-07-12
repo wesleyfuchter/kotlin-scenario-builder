@@ -1,4 +1,4 @@
-package com.wesleyfuchter.kotlinscenariobuilder.demo.model
+package com.wesleyfuchter.kotlinscenariobuilder.demo.search
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
