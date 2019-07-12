@@ -13,13 +13,17 @@ import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.junit4.SpringRunner
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 import java.time.Month
 
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @EnableAutoConfiguration
+@Transactional
+@Rollback
 class CustomerSearchTest {
 
     @Autowired private lateinit var loader: ScenarioLoader
@@ -28,15 +32,14 @@ class CustomerSearchTest {
 
     private val scenario = DatabaseScenario.with {
 
-        city(name = "New York")
         city(name = "Los Angeles")
         city(name = "Chicago")
         city(name = "Boston")
 
         customer(name = "Jack Shepherd", city = "Los Angeles")
-        customer(name = "James Ford", city = "New York")
+        customer(name = "James Ford", city = "Los Angeles")
         customer(name = "Hugo Reyes", city = "Boston")
-        customer(name = "John Lock", city = "Chicago")
+        customer(name = "John Lock", city = "Boston")
         customer(name = "Kate Austin", city = "Los Angeles")
 
         productCategory(name = "Car")
@@ -47,7 +50,6 @@ class CustomerSearchTest {
         product(name = "Land Hover", category = "Car")
         product(name = "Ferrari", category = "Car")
 
-        product(name = "Couch", category = "Home")
         product(name = "TV", category = "Home")
         product(name = "Book Shelf", category = "Home")
 
@@ -56,21 +58,53 @@ class CustomerSearchTest {
         product(name = "Soccer Ball", category = "Sports")
 
         order(customer = "Jack Shepherd",
-                orderDate = LocalDate.of(2019, Month.JULY, 4)) {
-            orderProduct(productName = "Basket", amount = 3)
-            orderProduct(productName = "TV", amount = 4)
+                orderDate = LocalDate.of(2019, Month.JUNE, 14), finished = false) {
+            orderProduct(productName = "Ferrari", amount = 1)
+            orderProduct(productName = "Soccer Ball", amount = 2)
+        }
+        order(customer = "Jack Shepherd",
+                orderDate = LocalDate.of(2019, Month.FEBRUARY, 3), finished = true) {
+            orderProduct(productName = "Baseball", amount = 50)
+        }
+        order(customer = "James Ford",
+                orderDate = LocalDate.of(2019, Month.JANUARY, 3), finished = true) {
             orderProduct(productName = "Chevrolet Camaro", amount = 2)
         }
-
-        order(customer = "Jack Shepherd")
-        order(customer = "James Ford")
-        order(customer = "James Ford")
-        order(customer = "James Ford")
-        order(customer = "Hugo Reyes")
-        order(customer = "Hugo Reyes", finished = true)
-        order(customer = "John Lock", finished = true)
-        order(customer = "Kate Austin", finished = true)
-        order(customer = "James Ford", finished = true)
+        order(customer = "James Ford",
+                orderDate = LocalDate.of(2019, Month.MAY, 8), finished = false) {
+            orderProduct(productName = "TV", amount = 2)
+            orderProduct(productName = "Book Shelf", amount = 3)
+        }
+        order(customer = "James Ford",
+                orderDate = LocalDate.of(2019, Month.JULY, 4), finished = false) {
+            orderProduct(productName = "Soccer Ball", amount = 5)
+        }
+        order(customer = "Hugo Reyes",
+                orderDate = LocalDate.of(2019, Month.FEBRUARY, 14), finished = true) {
+            orderProduct(productName = "Land Hover", amount = 2)
+        }
+        order(customer = "Hugo Reyes",
+                orderDate = LocalDate.of(2019, Month.JUNE, 30), finished = false) {
+            orderProduct(productName = "Ferrari", amount = 1)
+            orderProduct(productName = "TV", amount = 3)
+        }
+        order(customer = "John Lock",
+                orderDate = LocalDate.of(2019, Month.JUNE, 14), finished = false) {
+            orderProduct(productName = "TV", amount = 1)
+        }
+        order(customer = "John Lock",
+                orderDate = LocalDate.of(2019, Month.JULY, 10), finished = true) {
+            orderProduct(productName = "Land Hover", amount = 2)
+            orderProduct(productName = "Soccer Ball", amount = 1)
+        }
+        order(customer = "Kate Austin",
+                orderDate = LocalDate.of(2019, Month.MAY, 22), finished = false) {
+            orderProduct(productName = "Chevrolet Camaro", amount = 2)
+        }
+        order(customer = "Kate Austin",
+                orderDate = LocalDate.of(2019, Month.JANUARY, 13), finished = true) {
+            orderProduct(productName = "Ferrari", amount = 1)
+        }
 
     }
 
@@ -81,9 +115,12 @@ class CustomerSearchTest {
                             cityToDelivery = schema.cities.findFirstByName("Los Angeles"),
                             finished = false
                     )
-            )).`as`("Jack Shepherd, Hugo Reyes and James Ford has active orders to deliver in Los Angeles")
-                    .extracting(customerNameExtractor)
-                    .containsExactlyInAnyOrder("Jack Shepherd", "Hugo Reyes", "James Ford")
+            )).`as`("Jack Shepherd, Kate Austin and James Ford has active orders to deliver in Los Angeles")
+                    .extracting(customerTitle)
+                    .containsExactlyInAnyOrder("Order to Jack Shepherd at 14/06/2019",
+                            "Order to James Ford at 08/05/2019",
+                            "Order to James Ford at 04/07/2019",
+                            "Order to Kate Austin at 22/05/2019")
         }
     }
 
@@ -94,9 +131,9 @@ class CustomerSearchTest {
                             cityToDelivery = schema.cities.findFirstByName("Boston"),
                             finished = true
                     )
-            )).`as`("John Lock and Kate Austin has inactive orders to deliver in Boston")
-                    .extracting(customerNameExtractor)
-                    .containsExactlyInAnyOrder("John Lock", "Kate Austin")
+            )).`as`("John Lock and Hugo Reyes has inactive orders to deliver in Boston")
+                    .extracting(customerTitle)
+                    .containsExactlyInAnyOrder("Order to Hugo Reyes at 14/02/2019", "Order to John Lock at 10/07/2019")
         }
     }
 
@@ -107,9 +144,9 @@ class CustomerSearchTest {
                             productCategory = schema.productCategories.findFirstByName("Sports"),
                             finished = false
                     )
-            )).`as`("Just James Ford has active orders to Sports products")
-                    .extracting(customerNameExtractor)
-                    .containsExactlyInAnyOrder("James Ford")
+            )).`as`("Jack Shepherd and James Ford has active orders to Sports products")
+                    .extracting(customerTitle)
+                    .containsExactlyInAnyOrder("Order to Jack Shepherd at 14/06/2019", "Order to James Ford at 04/07/2019")
         }
     }
 
@@ -120,27 +157,34 @@ class CustomerSearchTest {
                             productCategory = schema.productCategories.findFirstByName("Car"),
                             finished = true
                     )
-            )).`as`("Kate Austin, John Lock, and Jack Shepherd has active orders to Sports products")
-                    .extracting(customerNameExtractor)
-                    .containsExactlyInAnyOrder("Kate Austin", "John Lock", "Jack Shepherd")
+            )).`as`("James Ford, Hugo Reyes, John Lock and Kate Austin has inactive orders to cars products")
+                    .extracting(customerTitle)
+                    .containsExactlyInAnyOrder("Order to James Ford at 03/01/2019",
+                            "Order to Hugo Reyes at 14/02/2019",
+                            "Order to John Lock at 10/07/2019",
+                            "Order to Kate Austin at 13/01/2019")
         }
     }
 
     @Test fun `test should return all customers with inactive orders for a given range of days`() {
         loader(scenario, schema) {
+            schema.orders.findAll()
             assertThat(orderService.searchByRequest(
                     CustomerSearchRequest(
                             startDate = LocalDate.of(2019, Month.JANUARY, 1),
                             endDate = LocalDate.of(2019, Month.APRIL, 30),
                             finished = true
                     )
-            )).`as`("Kate Austin, John Lock, and Jack Shepherd has active orders for the first quarter of year")
-                    .extracting(customerNameExtractor)
-                    .containsExactlyInAnyOrder("Hugo Reyes", "James Ford")
+            )).`as`("Jack Shepherd, James Ford, Hugo Reyes, and Kate Austin has inactive orders for the first quarter of year")
+                    .extracting(customerTitle)
+                    .containsExactlyInAnyOrder("Order to Jack Shepherd at 03/02/2019",
+                            "Order to James Ford at 03/01/2019",
+                            "Order to Hugo Reyes at 14/02/2019",
+                            "Order to Kate Austin at 13/01/2019")
         }
     }
 
-    private val customerNameExtractor = value(OrderSearchResponse::orderCustomerName)
+    private val customerTitle = value(OrderSearchResponse::title)
 
     private fun <T, R> value(extractor: (T) -> R) = Extractor<T, R> { extractor(it) }
 

@@ -52,7 +52,7 @@ create index product_category_idx on product (category_id asc);
 create table "order" (
     id bigint not null,
     customer_id bigint not null,
-    order_date timestamp not null,
+    order_date date not null,
     finished boolean not null default false
 );
 

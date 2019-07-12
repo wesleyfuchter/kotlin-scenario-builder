@@ -3,6 +3,7 @@ package com.wesleyfuchter.kotlinscenariobuilder.demo.search
 import com.wesleyfuchter.kotlinscenariobuilder.demo.model.City
 import com.wesleyfuchter.kotlinscenariobuilder.demo.model.ProductCategory
 import java.time.LocalDate
+import java.time.Month
 
 data class CustomerSearchRequest(
 
